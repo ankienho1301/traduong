@@ -4,175 +4,543 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>emiucuaankienho</title>
+<title>LOVE CIRCUIT // 001</title>
 
 <style>
-* {
-    box-sizing: border-box;
+* { box-sizing: border-box; }
+
+:root {
+    --pink: #ff2678;
+    --red: #ff164f;
+    --cyan: #00f6ff;
+    --bg: #050711;
 }
 
 body {
     margin: 0;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+        radial-gradient(ellipse at 50% 40%, #250b24 0%, #090917 45%, #03040a 100%);
+    color: white;
+    font-family: Consolas, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .2;
+    background-image:
+        linear-gradient(#243248 1px, transparent 1px),
+        linear-gradient(90deg, #243248 1px, transparent 1px);
+    background-size: 35px 35px;
+    mask-image: linear-gradient(transparent, black, transparent);
+}
+
+.app {
+    width: min(100%, 650px);
+    min-height: 100vh;
+    padding: 25px 18px 35px;
+    display: flex;
     flex-direction: column;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #ffc0cb, #ff69b4, #ffb6c1);
-    text-align: center;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    color: var(--cyan);
+    font-size: 10px;
+    letter-spacing: 2px;
+    border-bottom: 1px solid #00f6ff33;
+    padding-bottom: 13px;
 }
 
 h1 {
+    font-size: clamp(23px, 5vw, 34px);
+    letter-spacing: 5px;
+    margin: 30px 0 5px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 15px var(--pink), 0 0 35px var(--pink);
+}
+
+.subtitle {
+    color: #ff8bb7;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-align: center;
+}
+
+.stage {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1 / 1;
+    margin: 5px 0;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.core-label {
+    position: absolute;
+    bottom: 9%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    pointer-events: none;
+    color: #ff9abd;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--pink);
+}
+
+.message {
+    text-align: center;
     color: white;
-    text-shadow: 2px 2px 5px #ff1493;
-}
-
-.heart {
-    font-size: 130px;
-    animation: beat 0.8s infinite;
-    cursor: pointer;
-    user-select: none;
-    filter: drop-shadow(0 0 20px hotpink);
-}
-
-@keyframes beat {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-}
-
-p {
-    color: white;
-    font-size: 18px;
+    font-size: clamp(15px, 3.8vw, 20px);
     font-weight: bold;
-    padding: 0 15px;
+    text-shadow: 0 0 12px var(--pink);
+    margin: 0 0 8px;
+}
+
+.submessage {
+    color: #7f8aa8;
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 25px 0;
 }
 
 button {
-    border: none;
-    border-radius: 30px;
-    padding: 13px 22px;
-    margin: 8px;
-    font-size: 16px;
-    font-weight: bold;
+    font-family: inherit;
+    padding: 13px 18px;
+    border: 1px solid var(--pink);
+    background: #ff26781a;
+    color: #ff80ad;
+    letter-spacing: 1px;
+    font-size: 11px;
     cursor: pointer;
-    box-shadow: 0 4px 10px #0002;
+    box-shadow: 0 0 12px #ff267822, inset 0 0 12px #ff267811;
+    transition: .2s;
 }
 
-#yes {
-    background: #ff1744;
+button:hover {
+    background: var(--pink);
     color: white;
+    box-shadow: 0 0 25px var(--pink);
 }
 
 #no {
-    background: white;
-    color: #ff1744;
+    border-color: #46506a;
+    color: #9ba6c4;
+    background: #101424;
 }
 
-#message {
-    min-height: 30px;
-    margin-top: 15px;
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
+.status {
+    width: 100%;
+    border: 1px solid #00f6ff30;
+    padding: 13px;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--cyan);
+    font-size: 10px;
+    letter-spacing: 1px;
 }
 
-.floating {
-    position: absolute;
-    bottom: -30px;
-    animation: fly 4s linear forwards;
-    pointer-events: none;
+.dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #42ff9a;
+    box-shadow: 0 0 8px #42ff9a;
+    margin-right: 6px;
+    animation: blink 1s infinite;
 }
 
-@keyframes fly {
-    to {
-        transform: translateY(-110vh) rotate(360deg);
-        opacity: 0;
-    }
+@keyframes blink {
+    50% { opacity: .3; }
+}
+
+#toast {
+    min-height: 22px;
+    color: #ff83b1;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+@media (max-width: 380px) {
+    .app { padding: 18px 12px; }
+    .top { font-size: 8px; }
+    button { padding: 12px; }
 }
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<h1>💌 GỬI EM IU QUỲNH TRÂM 💌</h1>
+    <div class="top">
+        <span>♥ LOVE CIRCUIT v1.0</span>
+        <span>POWER: 220V ⚡</span>
+    </div>
 
-<div class="heart" onclick="heartClick()">❤️</div>
+    <h1>I LOVE YOU</h1>
+    <div class="subtitle">INITIALIZING HEART SYSTEM...</div>
 
-<p id="caption">Oi! Công chúa đánh cắp chái timk anh gòi</p>
+    <div class="stage">
+        <canvas id="circuit"></canvas>
+        <div class="core-label">EMOTIONAL CORE // ONLINE</div>
+    </div>
 
-<div>
-    <button id="yes" onclick="love()">💋 Hôn một cái</button>
-    <button id="no" onclick="runAway()">🙄 Không yêu đâu</button>
+    <div class="message" id="message">
+        Trái tim này chỉ đập vì em.
+    </div>
+
+    <div class="submessage" id="submessage">
+        Điện áp: 220V<br>
+        Tình cảm: luôn quá tải ⚡
+    </div>
+
+    <div class="buttons">
+        <button onclick="kiss()">♥ HÔN MỘT CÁI</button>
+        <button id="no" onclick="escapeButton()">KHÔNG YÊU ĐÂU</button>
+    </div>
+
+    <div class="status">
+        <span><i class="dot"></i>SYSTEM READY</span>
+        <span id="bpm">HEART RATE: 72 BPM</span>
+    </div>
+
+    <div id="toast"></div>
 </div>
 
-<div id="message"></div>
-
 <script>
-const captions = [
-    "Em là wifi, anh là điện thoại 📱",
-    "Không có em, đời anh như code thiếu dấu ;",
-    "Em có biết anh thiếu gì không? Thiếu em đó!",
-    "Tim anh chạy 220V, gặp em là chập mạch ⚡",
-    "Yêu em là nhiệm vụ, chiều em là KPI",
-    "Em là bug duy nhất anh không muốn fix 💗"
-];
+const canvas = document.getElementById("circuit");
+const ctx = canvas.getContext("2d");
 
-function heartClick() {
-    document.getElementById("caption").textContent =
-        captions[Math.floor(Math.random() * captions.length)];
+let W, H, dpr;
+let t = 0;
+let beat = 0;
+let boost = 0;
+let particles = [];
+let sparks = [];
 
-    for (let i = 0; i < 5; i++) {
-        createHeart();
+function resize() {
+    const rect = canvas.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = rect.width;
+    H = rect.height;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener("resize", resize);
+resize();
+
+// Phương trình đường viền trái tim
+function heartPoint(a, scale = 1) {
+    return {
+        x: 16 * Math.pow(Math.sin(a), 3) * scale,
+        y: -(13 * Math.cos(a) - 5 * Math.cos(2*a)
+             - 2 * Math.cos(3*a) - Math.cos(4*a)) * scale
+    };
+}
+
+function heartScale() {
+    return Math.min(W / 39, H / 37) * 0.87;
+}
+
+function point(a, s) {
+    const p = heartPoint(a, s);
+    return { x: W/2 + p.x, y: H/2 + p.y };
+}
+
+// Các điểm LED bên trong trái tim
+let leds = [];
+
+function makeLeds() {
+    leds = [];
+    const s = heartScale();
+    const step = 0.075;
+
+    for (let x = -1.25; x <= 1.25; x += step) {
+        for (let y = -1.25; y <= 1.25; y += step) {
+            const v = Math.pow(x*x + y*y - 1, 3) - x*x*y*y*y;
+
+            if (v <= 0) {
+                leds.push({
+                    x: W/2 + x * s * 16,
+                    y: H/2 - y * s * 16,
+                    phase: Math.random() * Math.PI * 2,
+                    size: 1 + Math.random() * 1.2
+                });
+            }
+        }
+    }
+}
+makeLeds();
+window.addEventListener("resize", makeLeds);
+
+function glowLine(points, color, width = 1) {
+    ctx.beginPath();
+    points.forEach((p, i) => {
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+    });
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 9;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+}
+
+function drawCircuit(s, pulse) {
+    const cx = W/2, cy = H/2;
+    const step = Math.min(W / 30, 14);
+    const extent = s * 18;
+
+    // Đường mạch PCB chạy từ hai cạnh vào trái tim
+    for (let side of [-1, 1]) {
+        for (let i = -3; i <= 3; i++) {
+            const y = cy + i * step * 1.6;
+            const end = cx + side * (extent * (0.65 + Math.random()*0));
+            const start = side < 0 ? 2 : W - 2;
+            const mid = side < 0 ? end - step*2 : end + step*2;
+
+            glowLine([
+                {x:start, y},
+                {x:mid, y},
+                {x:end, y:cy + i*step}
+            ], "#00f6ff35", 1);
+        }
+    }
+
+    // Viền trái tim bằng LED
+    const n = 180;
+    for (let i = 0; i < n; i++) {
+        const a = i / n * Math.PI * 2;
+        const p = point(a, s);
+        const bright = 0.45 + 0.55 * Math.max(0, Math.sin(t*3 - a*3));
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.4 + pulse, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255,35,115,${bright})`;
+        ctx.shadowColor = "#ff176b";
+        ctx.shadowBlur = 6 + pulse*4;
+        ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+}
+
+function drawLeds(pulse) {
+    for (const led of leds) {
+        const wave = (Math.sin(t*3.2 - led.y*0.045 + led.phase) + 1)/2;
+        const brightness = 0.22 + wave*0.78;
+        const radius = led.size * (0.75 + pulse*0.3);
+
+        ctx.beginPath();
+        ctx.arc(led.x, led.y, radius, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255,${Math.floor(25+wave*55)},${Math.floor(90+wave*100)},${brightness})`;
+        ctx.shadowColor = "#ff176b";
+        ctx.shadowBlur = 4 + wave*10 + pulse*3;
+        ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+}
+
+function drawTraces() {
+    const s = heartScale();
+    const cx = W/2, cy = H/2;
+    const colors = ["#00f6ff55", "#ff267855"];
+
+    // Mạch góc vuông có các điểm hàn
+    for (let side of [-1, 1]) {
+        for (let i = 0; i < 5; i++) {
+            const y = cy + (i-2)*s*3.7;
+            const x1 = cx + side*s*14;
+            const x2 = cx + side*s*(19 + i%2*2);
+
+            glowLine([
+                {x:x1, y},
+                {x:x2, y},
+                {x:x2, y:y + (i%2 ? 12 : -12)}
+            ], colors[i%2], 1);
+
+            ctx.beginPath();
+            ctx.arc(x2, y + (i%2 ? 12 : -12), 2, 0, Math.PI*2);
+            ctx.fillStyle = "#00f6ff";
+            ctx.shadowColor = "#00f6ff";
+            ctx.shadowBlur = 8;
+            ctx.fill();
+        }
+    }
+    ctx.shadowBlur = 0;
+}
+
+function drawPulse() {
+    const x = W * ((t * 0.48) % 1);
+    const y = H * 0.09;
+
+    // Xung điện chạy trên đường ECG
+    const points = [];
+    for (let i = 0; i < 80; i++) {
+        const px = W * i / 79;
+        const d = Math.abs(px - x);
+        let py = y;
+
+        if (d < 20) {
+            py += Math.sin((px-x)/20*Math.PI*4) * (20-d)*0.5;
+        }
+        points.push({x:px, y:py});
+    }
+    glowLine(points, "#00f6ff99", 1);
+}
+
+function createParticle() {
+    particles.push({
+        x: Math.random()*W,
+        y: H + 10,
+        size: 1 + Math.random()*3,
+        speed: 0.5 + Math.random()*1.4,
+        drift: (Math.random()-.5)*0.8,
+        life: 1
+    });
+}
+
+function drawParticles() {
+    if (Math.random() < 0.16) createParticle();
+
+    particles.forEach(p => {
+        p.y -= p.speed;
+        p.x += p.drift;
+        p.life -= 0.003;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255,65,140,${Math.max(0,p.life)})`;
+        ctx.shadowColor = "#ff2678";
+        ctx.shadowBlur = 10;
+        ctx.fill();
+    });
+
+    particles = particles.filter(p => p.life > 0 && p.y > -10);
+    ctx.shadowBlur = 0;
+}
+
+function drawSparks() {
+    sparks.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.025;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(0,p.life)})`;
+        ctx.shadowColor = "#ff2678";
+        ctx.shadowBlur = 12;
+        ctx.fill();
+    });
+    sparks = sparks.filter(p => p.life > 0);
+    ctx.shadowBlur = 0;
+}
+
+function burst() {
+    for (let i = 0; i < 45; i++) {
+        const a = Math.random()*Math.PI*2;
+        const v = 1 + Math.random()*5;
+        sparks.push({
+            x: W/2, y: H/2,
+            vx: Math.cos(a)*v,
+            vy: Math.sin(a)*v,
+            life: 1
+        });
     }
 }
 
-function love() {
+function frame() {
+    t += 0.025;
+
+    const beatWave = Math.max(0, Math.sin(t*2.8));
+    const pulse = beatWave*2 + boost*3;
+    boost *= 0.94;
+
+    ctx.clearRect(0, 0, W, H);
+
+    drawPulse();
+    drawCircuit(heartScale(), pulse);
+    drawTraces();
+    drawLeds(pulse);
+    drawParticles();
+    drawSparks();
+
+    requestAnimationFrame(frame);
+}
+frame();
+
+// Nút hôn
+function kiss() {
+    boost = 3;
+    burst();
+
     document.getElementById("message").textContent =
-        "ÁAAAAA 😳 HÔN RỒI KHÔNG ĐƯỢC CHẠY ĐÂU NHA!!!";
+        "💋 ĐÃ NHẬN NỤ HÔN!";
 
-    document.getElementById("caption").textContent =
-        "Đã nhận nụ hôn. Đang lưu vào bộ nhớ vĩnh viễn 💾❤️";
+    document.getElementById("submessage").innerHTML =
+        "Hệ thống đang quá tải...<br>Đang lưu nụ hôn vào bộ nhớ vĩnh viễn 💾";
 
-    for (let i = 0; i < 25; i++) {
-        setTimeout(createHeart, i * 80);
-    }
+    document.getElementById("bpm").textContent =
+        "HEART RATE: 999 BPM";
+
+    document.getElementById("toast").textContent =
+        "WARNING: LOVE LEVEL EXCEEDS MAXIMUM LIMIT ⚠️";
 }
 
-function runAway() {
+// Nút không yêu chạy trốn
+function escapeButton() {
     const btn = document.getElementById("no");
 
     btn.style.position = "fixed";
 
-    const maxX = window.innerWidth - btn.offsetWidth;
-    const maxY = window.innerHeight - btn.offsetHeight;
+    const maxX = window.innerWidth - btn.offsetWidth - 10;
+    const maxY = window.innerHeight - btn.offsetHeight - 10;
 
-    btn.style.left = Math.random() * Math.max(0, maxX) + "px";
-    btn.style.top = Math.random() * Math.max(0, maxY) + "px";
+    btn.style.left = Math.max(5, Math.random()*maxX) + "px";
+    btn.style.top = Math.max(5, Math.random()*maxY) + "px";
 
-    document.getElementById("message").textContent =
-        "BẤM GÌ KHÓ COI DỢ, CHO CHỌN LẠI Ớ 🤨";
+    document.getElementById("toast").textContent =
+        "ERROR 404: KHÔNG YÊU KHÔNG TỒN TẠI 🤨";
 }
 
-function createHeart() {
-    const heart = document.createElement("div");
-    heart.className = "floating";
-    heart.textContent = ["❤️", "💖", "💕", "💗", "😘"][
-        Math.floor(Math.random() * 5)
-    ];
-
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = (20 + Math.random() * 30) + "px";
-
-    document.body.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 4000);
-}
-
-// Mưa tim tự động
-setInterval(createHeart, 400);
+// Nhịp tim thay đổi tự nhiên
+setInterval(() => {
+    if (boost < 0.2) {
+        document.getElementById("bpm").textContent =
+            "HEART RATE: " + (72 + Math.floor(Math.random()*8)) + " BPM";
+    }
+}, 1800);
 </script>
-
 </body>
 </html>
